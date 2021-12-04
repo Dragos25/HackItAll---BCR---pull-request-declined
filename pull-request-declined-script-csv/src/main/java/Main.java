@@ -95,7 +95,7 @@ public class Main {
         allCompanies.stream().forEach(System.out::println);
         //getDataForCompany("AAPL");
         allCompanies.remove(0);
-            getDataForCompany(allCompanies.get(500));
+            getDataForCompany(allCompanies.get(2));
 //        for (String companyName : allCompanies) {
 //            System.out.println(companyName);
 //            if (companyName.length() > 1) getDataForCompany(companyName);
