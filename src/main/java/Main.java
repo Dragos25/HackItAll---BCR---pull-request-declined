@@ -43,7 +43,7 @@ public class Main {
         ArrayList<String> records = new ArrayList<String>();
         try {
 
-            CSVReader reader = new CSVReader(new FileReader("C:\\Users\\DRAGOS\\Desktop\\hackitall\\API forbes\\src\\main\\java\\500COMPANII_CSV.csv"));
+            CSVReader reader = new CSVReader(new FileReader("C:\\Users\\Csampar\\Downloads\\500COMPANII_CSV.csv"));
 
             String[] nextLine;
             int rowNumber = 0;
@@ -65,7 +65,7 @@ public class Main {
     }
 
     public static void writeCompanyData(List<HistoricalQuote> history, String company) throws IOException {
-        CSVWriter csvWrite = new CSVWriter(new FileWriter(company+".csv"));
+        CSVWriter csvWrite = new CSVWriter(new FileWriter(company + ".csv"));
         String[] entries = {"date, price"};
         csvWrite.writeNext(entries);
         for (HistoricalQuote quote : history) {
@@ -85,15 +85,21 @@ public class Main {
         from.add(Calendar.YEAR, Integer.valueOf("-" + year));
 
         Stock stock = YahooFinance.get(company);
-        List<HistoricalQuote> history = stock.getHistory(from, to, getInterval("WEEKLY"));
-        writeCompanyData(history,company);
+        List<HistoricalQuote> history = stock.getHistory(from, to, getInterval("DAILY"));
+        writeCompanyData(history, company);
     }
 
     public static void main(String[] args) throws IOException {
 
         ArrayList<String> allCompanies = readAllCompanies();
         allCompanies.stream().forEach(System.out::println);
-        getDataForCompany("AAPL");
-
+        //getDataForCompany("AAPL");
+        allCompanies.remove(0);
+            getDataForCompany(allCompanies.get(500));
+//        for (String companyName : allCompanies) {
+//            System.out.println(companyName);
+//            if (companyName.length() > 1) getDataForCompany(companyName);
+//
+//        }
     }
 }
