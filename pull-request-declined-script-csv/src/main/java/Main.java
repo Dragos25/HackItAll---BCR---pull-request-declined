@@ -1,15 +1,3 @@
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-
-
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
@@ -17,6 +5,15 @@ import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
 import yahoofinance.histquotes.HistoricalQuote;
 import yahoofinance.histquotes.Interval;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 public class Main {
 
@@ -26,7 +23,7 @@ public class Main {
         return formatDate;
     }
 
-    private static Interval getInterval(String searchType) {
+    private static Interval getInterval(String searchType) { //choose the amount of time for the analyze
         Interval interval = null;
         if (searchType.toUpperCase() == "MONTHLY")
             interval = Interval.MONTHLY;
@@ -43,12 +40,10 @@ public class Main {
         ArrayList<String> records = new ArrayList<String>();
         try {
 
-            CSVReader reader = new CSVReader(new FileReader("C:\\Users\\Csampar\\Downloads\\500COMPANII_CSV.csv"));
+            CSVReader reader = new CSVReader(new FileReader("500COMPANII_CSV.csv"));
 
             String[] nextLine;
-            int rowNumber = 0;
             while ((nextLine = reader.readNext()) != null) {
-                rowNumber++;
                 String name = nextLine[0];
                 records.add(name);
             }
@@ -85,7 +80,7 @@ public class Main {
         from.add(Calendar.YEAR, Integer.valueOf("-" + year));
 
         Stock stock = YahooFinance.get(company);
-        List<HistoricalQuote> history = stock.getHistory(from, to, getInterval("DAILY"));
+        List<HistoricalQuote> history = stock.getHistory(from, to, getInterval("DAILY")); //take the smallest amount of time, a day
         writeCompanyData(history, company);
     }
 
@@ -93,13 +88,11 @@ public class Main {
 
         ArrayList<String> allCompanies = readAllCompanies();
         allCompanies.stream().forEach(System.out::println);
-        //getDataForCompany("AAPL");
-        allCompanies.remove(0);
-            getDataForCompany(allCompanies.get(2));
-//        for (String companyName : allCompanies) {
-//            System.out.println(companyName);
-//            if (companyName.length() > 1) getDataForCompany(companyName);
-//
-//        }
+        allCompanies.remove(0); //the header
+        for (String companyName : allCompanies) {
+            System.out.println(companyName);
+            if (companyName.length() > 1) getDataForCompany(companyName); //creates a csv file for every company
+
+        }
     }
 }
